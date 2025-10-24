@@ -1,3 +1,5 @@
+# FastRC飞行控制器
+> Fast for rocket control
 ## 硬件架构：
 ### 主控板
 主控电源设计思想：
