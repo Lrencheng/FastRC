@@ -74,3 +74,95 @@ BOOT0:
 1. 数据回传
 2. 上位机通信
 
+### 软件架构
+>软件架构仿照如下：
+```
+ANO_PioneerPro-088/
+├── Libraries/                                  # 第三方库文件
+│   ├── CMSIS/                                  # ARM Cortex-M内核支持库
+│   │   ├── DSP_Lib/                            # 数字信号处理库
+│   │   ├── Include/                            # CMSIS头文件
+│   │   └── ST/                                 # ST官方CMSIS支持
+│   ├── STM32F4xx_StdPeriph_Driver/             # ST标准外设驱动库
+│   │   ├── inc/                                # 头文件
+│   │   └── src/                                # 源文件
+│   └── USBStack/                               # USB协议栈
+│       ├── INC/                                # USB头文件
+│       └── SRC/                                # USB源文件
+└── SRC/                                        # 飞控主源码
+    ├── AnoImu/                                 # IMU相关模块
+    │   ├── Ano_Imu_Calibration.c/.h            # IMU校准
+    │   ├── Ano_Imu_Data.c/.h                   # IMU数据处理
+    │   ├── Ano_Imu_Task.c/.h                   # IMU任务管理
+    ├── applications/                           # 应用层代码
+    │   ├── Ano_DT.c/.h                         # 数据传输
+    │   ├── Ano_FlyCtrl.c/.h                    # 飞行控制
+    │   ├── Ano_OF.c/.h                         # 光流处理
+    │   ├── Ano_OF_DecoFusion.c/.h              # 光流数据融合
+    │   ├── Ano_OPMV_CBTracking_Ctrl.c/.h       # OpenMV色块追踪控制
+    │   ├── Ano_OPMV_Ctrl.c/.h                  # OpenMV控制
+    │   ├── Ano_OPMV_LineTracking_Ctrl.c/.h     # OpenMV线追踪控制
+    │   ├── Ano_Parameter.c/.h                  # 参数管理
+    │   ├── Ano_ProgramCtrl_User.c/.h           # 用户程序控制
+    │   ├── Ano_RC.c/.h                         # 遥控器处理
+    │   ├── Ano_Scheduler.c/.h                  # 任务调度
+    │   ├── Ano_USB.c/.h                        # USB通信
+    │   ├── Ano_UWB.c/.h                        # UWB定位
+    │   ├── BSP_Init.c/.h                       # 板级初始化
+    │   ├── main.c                              # 主程序入口
+    │   ├── stm32f4xx_conf.h                    # STM32配置
+    │   ├── stm32f4xx_it.c                      # 中断处理
+    │   └── usb_config.c                        # USB配置
+    ├── drivers/                                # 驱动层代码
+    │   ├── Drv_BSP.c/.h                        # 板级支持包
+    │   ├── Drv_OpenMV.c/.h                     # OpenMV驱动
+    │   ├── Drv_RcIn.c/.h                       # 遥控输入驱动
+    │   ├── Drv_Servo.c/.h                      # 舵机驱动
+    │   ├── Drv_UP_Flow.c/.h                    # 光流传感器驱动
+    │   ├── Drv_adc.c/.h                        # ADC驱动
+    │   ├── Drv_ak09915.c/.h                    # AK09915磁力计驱动
+    │   ├── Drv_ak8975.c/.h                     # AK8975磁力计驱动
+    │   ├── Drv_bmi088.c/.h                     # BMI088传感器驱动
+    │   ├── Drv_gps.c/.h                        # GPS驱动
+    │   ├── Drv_heating.c/.h                    # 加热控制驱动
+    │   ├── Drv_i2c_soft.c/.h                   # 软件I2C驱动
+    │   ├── Drv_icm20602.c/.h                   # ICM20602传感器驱动
+    │   ├── Drv_laser.c/.h                      # 激光传感器驱动
+    │   ├── Drv_led.c/.h                        # LED驱动
+    │   ├── Drv_pwm_out.c/.h                    # PWM输出驱动
+    │   ├── Drv_spi.c/.h                        # SPI驱动
+    │   ├── Drv_spl06.c/.h                      # SPL06气压计驱动
+    │   ├── Drv_time.c/.h                       # 时间管理驱动
+    │   ├── Drv_usart.c/.h                      # USART驱动
+    │   ├── Drv_w25qxx.c/.h                     # W25QXX FLASH驱动
+    │   └── usbd_STM32F4xx_FS.c                 # STM32 USB设备驱动
+    ├── fc_general/                             # 通用飞控模块
+    │   ├── Ano_FcData.c/.h                     # 飞控数据管理
+    │   ├── Ano_Filter.c/.h                     # 滤波器
+    │   ├── Ano_Imu.c/.h                        # IMU处理
+    │   ├── Ano_Math.c/.h                       # 数学运算
+    │   ├── Ano_MotionCal.c/.h                  # 运动校准
+    │   ├── Ano_Navigate.c/.h                   # 导航算法
+    │   ├── Ano_Pid.c/.h                        # PID控制
+    │   ├── Ano_Sensor_Basic.c/.h               # 基础传感器处理
+    └── fc_specific/                            # 特定飞控功能模块
+        ├── Ano_AltCtrl.c/.h                    # 高度控制
+        ├── Ano_AttCtrl.c/.h                    # 姿态控制
+        ├── Ano_FlightCtrl.c/.h                 # 飞行控制
+        ├── Ano_FlightDataCal.c/.h              # 飞行数据计算
+        ├── Ano_LocCtrl.c/.h                    # 位置控制
+        ├── Ano_MagProcess.c/.h                 # 磁力计处理
+        ├── Ano_MotorCtrl.c/.h                  # 电机控制
+        ├── Ano_Power.c/.h                      # 电源管理
+        └── config.h                            # 配置文件
+```
+### 开发流程
+>软件开发
+#### 1. 基础通信层
+
+|模块通信驱动|通信方式|负责人|
+|--|--|--|
+|陀螺仪ICM-42688-P|SPI|黄|
+|磁力计LIS3MDLTR|IIC|黄|
+|气压计SPL06|IIC|程|
+|USB通信|虚拟串口，USB|程|
