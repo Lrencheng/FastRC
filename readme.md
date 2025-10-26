@@ -1,5 +1,7 @@
 # FastRC飞行控制器
-> Fast for rocket control
+> Faster for rocket control
+
+![](./assets/屏幕截图%202025-10-27%20013124.png)
 ## 硬件架构：
 ### 主控板
 主控电源设计思想：
